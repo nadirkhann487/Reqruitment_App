@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  apply_by: 2021-03-28
+  company: MyString
+
+two:
+  title: MyString
+  description: MyText
+  apply_by: 2021-03-28
+  company: MyString

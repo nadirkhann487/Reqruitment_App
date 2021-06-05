@@ -1,0 +1,104 @@
+rails new appname
+// Device
+
+gem 'devise', '~> 4.2'
+rails g devise:install
+inside config/environment/development.rb
+config.action_mailer.default_url_options = { host: 'localhost',port: 3000}
+rails g devise:views
+rails g devise user
+rails db:migrate
+
+// db setup
+
+move sqlite to development
+
+put group :production do
+  gem 'pg', '~> 1.2', '>= 1.2.3'
+end
+
+// add bootstrap
+
+Yarn add bootstrap jquery popper.js
+navigate to config/webpack/environment.js
+const { environment } = require('@rails/webpacker')
+const webpack = require("webpack")
+
+environment.plugins.append("Provide", new webpack.ProvidePlugin({
+    $: 'jquery',
+    jQuery: 'jquery',
+    Popper: ['popper.js', 'default']
+}))
+
+module.exports = environment
+
+navigate to javascript/packs/application.js
+import 'bootstrap'
+ assets/stylesheets and rename application.css to application.scss
+@import "bootstrap/scss/bootstrap";
+
+// git
+
+git init
+git add .
+git commit -am 'comment'
+git remote add origin https://github.com/nadirkhann487/FriendsApp.git
+git branch -M main
+git push -u origin main
+git push heroku main // for heroku
+
+// heroku
+
+heroku login
+heroku create
+heroku rename railsfriends
+heroku keys:add
+heroku run rails db:migrate
+
+//add new model
+
+rails g new model Article id:integer title:string dexcription:text price:decimal 
+rails generate model Comment commenter:string body:text article:references
+ // in routes.rb
+ resources :articles do
+    resources :comments
+  end
+has_many :comments, dependent: :destroy // in Article
+belongs_to :article // in comments
+
+// add controller
+rails g controller Articles index show
+
+// migration
+
+rails g migration add_user_id_to_friends user_id:integer:index
+rails generate migration AddStatusToArticles status:string
+
+// setting routes
+get "/articles", to: "articles/index"
+
+// authrnticate user
+before_action :authenticate_user!, except: [:index, :show]
+
+// http authentication
+http_basic_authenticate_with name: "dhh", password: "secret", except: [:index, :show]
+http_basic_authenticate_with name: "dhh", password: "secret", only: :destroy
+
+// table beautify
+
+<table class="table table-striped table-bordered table-hover">
+
+  <thead class="thead-dark">
+
+// form beautify
+<div class="field form-group">
+<%= form.text_field :password, class: "form-control", placeholder: "Twitter" %>
+
+// validates
+
+VALID_STATUSES = ['public', 'private', 'archived']
+
+  validates :status, inclusion: { in: VALID_STATUSES }
+
+
+
